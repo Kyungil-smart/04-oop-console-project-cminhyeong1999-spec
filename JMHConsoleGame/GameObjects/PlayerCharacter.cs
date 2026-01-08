@@ -79,9 +79,17 @@ public class PlayerCharacter : GameObject
         
         Vector current = Position;
         Vector nextPos = Position + direction;
-        
+
         // 1. 맵 바깥은 아닌지?
+        if ( nextPos.Y < 0 || nextPos.X < 0 || nextPos.Y >= Field.GetLength(0) || nextPos.X >= Field.GetLength(1))
+        {
+            return;
+        }
         // 2. 벽인지?
+        //if ()
+        //{
+        //    return;
+        //}
 
         GameObject nextTileObject = Field[nextPos.Y, nextPos.X].OnTileObject;
 
@@ -112,13 +120,13 @@ public class PlayerCharacter : GameObject
 
     public void DrawManaGauge()
     {
-        Console.SetCursorPosition(Position.X - 2, Position.Y - 1);
+        Console.SetCursorPosition(0, 16);
         _healthGauge.Print(ConsoleColor.Blue);
     }
 
     public void DrawHealthGauge()
     {
-        Console.SetCursorPosition(Position.X - 2, Position.Y - 2);
+        Console.SetCursorPosition(0, 15);
         _healthGauge.Print(ConsoleColor.Red);
     }
 

@@ -4,6 +4,7 @@ public class TownScene : Scene
 {
     private Tile[,] _field = new Tile[10, 20];
     private PlayerCharacter _player;
+    private Monster _monster;
     
     public TownScene(PlayerCharacter player) => Init(player);
 
@@ -26,6 +27,8 @@ public class TownScene : Scene
         _player.Field = _field;
         _player.Position = new Vector(4, 2);
         _field[_player.Position.Y, _player.Position.X].OnTileObject = _player;
+
+        _field[8,8].OnTileObject = new Monster();
 
         _field[3, 5].OnTileObject = new Potion() {Name = "Potion1"};
         _field[2, 15].OnTileObject = new Potion() {Name = "Potion2"};
