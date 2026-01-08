@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36811.4 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JMHConsoleGame", "JMHConsoleGame.csproj", "{193D76DA-F28A-44C4-BA9C-8112D9F6C3FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{193D76DA-F28A-44C4-BA9C-8112D9F6C3FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{193D76DA-F28A-44C4-BA9C-8112D9F6C3FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{193D76DA-F28A-44C4-BA9C-8112D9F6C3FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{193D76DA-F28A-44C4-BA9C-8112D9F6C3FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A817652E-1F1D-469D-A19D-281B2B90833A}
+	EndGlobalSection
+EndGlobal
