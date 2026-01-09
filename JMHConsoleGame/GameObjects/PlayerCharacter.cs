@@ -30,7 +30,7 @@ public class PlayerCharacter : GameObject
     {
         if (InputManager.GetKey(ConsoleKey.I))
         {
-            HandleControl();
+            InventoryControl();
         }
         
         if (InputManager.GetKey(ConsoleKey.UpArrow))
@@ -66,7 +66,7 @@ public class PlayerCharacter : GameObject
         }
     }
 
-    public void HandleControl()
+    public void InventoryControl()
     {
         _inventory.IsActive = !_inventory.IsActive;
         IsActiveControl = !_inventory.IsActive;
@@ -81,7 +81,7 @@ public class PlayerCharacter : GameObject
         Vector nextPos = Position + direction;
 
         // 1. 맵 바깥은 아닌지?
-        if ( nextPos.Y < 0 || nextPos.X < 0 || nextPos.Y >= Field.GetLength(0) || nextPos.X >= Field.GetLength(1))
+        if ( nextPos.Y < Field[0,0].Position.Y || nextPos.X < Field[0,0].Position.X || nextPos.Y >= Field.GetLength(0) || nextPos.X >= Field.GetLength(1))
         {
             return;
         }

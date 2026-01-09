@@ -4,7 +4,6 @@ public class TownScene : Scene
 {
     private Tile[,] _field = new Tile[10, 20];
     private PlayerCharacter _player;
-    private Monster _monster;
     
     public TownScene(PlayerCharacter player) => Init(player);
 
