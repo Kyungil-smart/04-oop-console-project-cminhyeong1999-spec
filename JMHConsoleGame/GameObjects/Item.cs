@@ -12,7 +12,8 @@ public abstract class Item : GameObject
 
     public abstract void Use();
 
-    public void PrintInfo()
+    public string PrintInfo()
     {
+        return Description;
     }
 }

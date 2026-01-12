@@ -8,6 +8,7 @@ public class PlayerCharacter : GameObject
     public ObservableProperty<int> Mana = new ObservableProperty<int>(5);
     private string _healthGauge;
     private string _manaGauge;
+    private int _attackValue;
     
     public Tile[,] Field { get; set; }
     private Inventory _inventory;
@@ -23,6 +24,7 @@ public class PlayerCharacter : GameObject
         Mana.AddListener(SetManaGauge);
         _healthGauge = "■■■■■";
         _manaGauge = "■■■■■";
+        _attackValue = 10;
         _inventory = new Inventory(this);
     }
 
@@ -70,7 +72,6 @@ public class PlayerCharacter : GameObject
     {
         _inventory.IsActive = !_inventory.IsActive;
         IsActiveControl = !_inventory.IsActive;
-        Debug.LogWarning($"{_inventory._itemMenu.CurrentIndex}");
     }
 
     private void Move(Vector direction)
@@ -98,10 +99,16 @@ public class PlayerCharacter : GameObject
             if (nextTileObject is IInteractable)
             {
                 (nextTileObject as IInteractable).Interact(this);
+                if (Field == null) return;
+
+                
             }
+
         }
 
-        Field[Position.Y, Position.X].OnTileObject = null;
+        if (Field[Position.Y, Position.X].OnTileObject == this)
+            Field[Position.Y, Position.X].OnTileObject = null;
+        
         Field[nextPos.Y, nextPos.X].OnTileObject = this;
         Position = nextPos;
     }
