@@ -14,6 +14,9 @@ public struct Ractangle
         Width = width;
         Height = height;
     }
+
+    public int CenterX => X + Width / 2;
+    public int CenterY => Y + Height / 2;
     
     public void Draw()
     {

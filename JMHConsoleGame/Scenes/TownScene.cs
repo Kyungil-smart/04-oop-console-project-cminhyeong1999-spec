@@ -2,8 +2,8 @@
 
 public class TownScene : Scene
 {
-    private static readonly int _mapWidth = 300;
-    private static readonly int _mapHeight = 300;
+    private static int _mapWidth = 101;
+    private static int _mapHeight = 101;
     private Tile[,] _field = new Tile[_mapHeight, _mapWidth];
     private PlayerCharacter _player;
     
@@ -21,12 +21,10 @@ public class TownScene : Scene
                 _field[y, x] = new Tile(pos);
             }
         }
-        
-        var ripper = CreateMonster.Create(Monster.MonsterType.Ripper);
-        ripper.Position = new Vector(8, 8);
-        _field[8,8].OnTileObject = ripper;
 
         SetWall();
+        SetField();
+        MirrorCenterPoint();
     }
 
     public override void Enter()
@@ -106,6 +104,61 @@ public class TownScene : Scene
                 if(i == 0 || i == _field.GetLength(0) - 1) _field[i,j].OnTileObject = new Wall();
                 else if (j == 0 || j == _field.GetLength(1) - 1) _field[i,j].OnTileObject = new Wall();
             }
+        }
+    }
+
+    private void SetField()
+    {
+        if(_field == null) return;
+
+        for(int i = 0; i < _field.GetLength(0)/2; i++)
+        {
+            for(int j = 0; j < _field.GetLength(1)/2; j++)
+            {
+                if(j == 34 && i <= 29) _field[i,j].OnTileObject = new Wall();
+                else if (j > 34 && j <= _field.GetLength(1)/2 && i == 29) _field[i,j].OnTileObject = new Wall();
+                else if(j <= 29 && i == 34) _field[i,j].OnTileObject = new Wall();
+                else if (j == 29 && i > 34 && i <= _field.GetLength(0)/2) _field[i,j].OnTileObject = new Wall();
+            }
+        }        
+    }
+
+
+    // 중앙(타일 사이) 기준 대칭: width == 300 같은 짝수 너비에서 가운데(149.5)를 축으로 사용
+    private void MirrorCenterPoint()
+    {
+        int width = _field.GetLength(1);
+        int height = _field.GetLength(0);
+
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width / 2; j++)
+            {
+                var index = _field[i,j].OnTileObject;
+
+                _field[i,100 - j].OnTileObject = index;
+                _field[100 - i,j].OnTileObject = index;
+                _field[100 - i,100 - j].OnTileObject = index;
+            }
+        }
+    }
+
+    // 얕은 복제: 현재 프로젝트의 GameObject들은 상태가 단순하므로 새 인스턴스를 만들어 할당
+    // 필요 시 복제 로직을 확장하세요 (예: 아이템 스택, 고유 ID 등)
+    private GameObject CloneGameObject(GameObject original)
+    {
+        if (original == null) return null;
+
+        switch (original)
+        {
+            case Wall:
+                return new Wall();
+            case PlayerCharacter:
+                // 플레이어는 복제하지 않음(맵 대칭시에 플레이어를 복제하면 안됨)
+                return null;
+            default:
+                // 다른 GameObject 계열이 있다면 타입별로 추가 처리
+                return null;
         }
     }
 
