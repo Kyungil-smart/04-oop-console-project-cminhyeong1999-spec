@@ -46,27 +46,16 @@ public class TownScene : Scene
 
     public override void Render()
     {
-        //PrintField();
         PrintCameraView();
         _player.Render();
+        PrintInventory();
+        PrintHowToPlay();
     }
 
     public override void Exit()
     {
         _field[_player.Position.Y, _player.Position.X].OnTileObject = null;
         _player.Field = null;
-    }
-
-    private void PrintField()
-    {
-        for (int y = 0; y < _field.GetLength(0); y++)
-        {
-            for (int x = 0; x < _field.GetLength(1); x++)
-            {
-                _field[y, x].Print();
-            }
-            Console.WriteLine();
-        }
     }
 
     private void PrintCameraView()
@@ -88,21 +77,7 @@ public class TownScene : Scene
         if (camTop + view_height > _field.GetLength(0)) camTop = _field.GetLength(0) - view_height;
 
         // 테두리 출력을 통해 현재 출력되는 화면을 식별하기 용이하게끔 함
-        for (int y = 0; y < view_height + 2; y++)
-        {
-            Console.SetCursorPosition(29, y);
-            for (int x = 0; x < view_width + 2; x++)
-            {
-                if(x == 0 && y == 0) '┌'.Print();
-                else if (x == view_width + 1 && y == 0) '┐'.Print();
-                else if (x == 0 && y == view_height + 1) '└'.Print();
-                else if (x == view_width + 1 && y == view_height + 1) '┘'.Print();
-                else if (x == 0 || x == view_width + 1) '│'.Print();
-                else if (y == 0 || y == view_height + 1) '─'.Print();
-                else ' '.Print();
-            }
-            Console.WriteLine();
-        }
+        Printboundary();
 
         for (int y = 0; y < view_height; y++)
         {
@@ -133,8 +108,9 @@ public class TownScene : Scene
         }
     }
 
-    private void PrintEmoji()
+    private void PrintInventory()
     {
-        
+        Console.SetCursorPosition(0, 0);
+        _player._inventory.Render();
     }
 }

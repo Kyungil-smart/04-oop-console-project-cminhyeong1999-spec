@@ -9,6 +9,7 @@ public class Inventory
     public Inventory(PlayerCharacter owner)
     {
         _owner = owner;
+        _itemMenu.Add("가방", ()=>{});
     }
 
     public void Add(Item item)
@@ -19,7 +20,7 @@ public class Inventory
         _itemMenu.Add(item.Name, item.Use);
         item.Inventory = this;
         item.Owner = _owner;
-    }
+    }           
 
     public void Remove(Item item)
     {
@@ -29,9 +30,7 @@ public class Inventory
 
     public void Render()
     {
-        if (!IsActive) return;
-        
-        _itemMenu.Render(10, 15);
+        _itemMenu.Render(0, 0);
     }
 
     public void Select()

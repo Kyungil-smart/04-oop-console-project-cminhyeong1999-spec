@@ -8,6 +8,7 @@ public class GameManager
 
     public void Run()
     {
+        Console.CursorVisible = false;
         Init();
         
         while (!IsGameOver)

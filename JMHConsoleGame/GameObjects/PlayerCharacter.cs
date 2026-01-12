@@ -11,8 +11,8 @@ public class PlayerCharacter : GameObject
     private int _attackValue;
     
     public Tile[,] Field { get; set; }
-    private Inventory _inventory;
-    private SkillInven _skillinven;
+    public Inventory _inventory;
+    public SkillInven _skillinven;
     public bool IsActiveControl { get; private set; }
 
     public PlayerCharacter() => Init();
@@ -28,6 +28,7 @@ public class PlayerCharacter : GameObject
         _attackValue = 10;
         _inventory = new Inventory(this);
         _skillinven = new SkillInven(this);
+        _skillinven.Add(new Skill{Name="베기"});
     }
 
     public void Update()
@@ -127,6 +128,8 @@ public class PlayerCharacter : GameObject
         DrawManaGauge();
         _inventory.Render();
         _skillinven.Render();
+        PrintIsInventory();
+        PrintIsSkillMenu();
     }
 
     public void AddItem(Item item)
@@ -139,16 +142,44 @@ public class PlayerCharacter : GameObject
         _skillinven.Add(skill);
     }
 
+    public void DrawHealthGauge()
+    {
+        Console.SetCursorPosition(30, 14);
+        Console.Write("HP ");
+        _healthGauge.Print(ConsoleColor.Red);
+    }
+
     public void DrawManaGauge()
     {
-        Console.SetCursorPosition(90, 16);
+        Console.SetCursorPosition(30, 15);
+        Console.Write("MP ");
         _healthGauge.Print(ConsoleColor.Blue);
     }
 
-    public void DrawHealthGauge()
+    public void PrintIsInventory()
     {
-        Console.SetCursorPosition(90, 15);
-        _healthGauge.Print(ConsoleColor.Red);
+        Console.SetCursorPosition(55, 14);
+        if (_inventory.IsActive)
+        {
+            Console.Write("가방 활성화");
+        }
+        else
+        {
+            Console.Write("가방 비활성화");
+        }
+    }
+
+    public void PrintIsSkillMenu()
+    {
+        Console.SetCursorPosition(55, 15);
+        if (_skillinven.IsActive)
+        {
+            Console.Write("스킬창 활성화");
+        }
+        else
+        {
+            Console.Write("스킬창 비활성화");
+        }
     }
 
     public void SetHealthGauge(int health)

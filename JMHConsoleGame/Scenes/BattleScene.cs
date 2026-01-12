@@ -73,14 +73,18 @@ public class BattleScene : Scene
     }
 
     public override void Render()
-    {        
+    {
+        Printboundary();
+        _player.DrawHealthGauge();
+        _player.DrawManaGauge();
+        _player._inventory.Render();
         if (IsAttacked == true)
         {
-            _attackMenu.Render(8,5);
+            _attackMenu.Render(30,16);
         }
         else
         {
-            _battleMenu.Render(8,5);
+            _battleMenu.Render(30,16);
         }
 
     }

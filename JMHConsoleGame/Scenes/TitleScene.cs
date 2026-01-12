@@ -43,10 +43,12 @@ public class TitleScene : Scene
     
     public override void Render()
     {
-        Console.SetCursorPosition(5, 1);
+        Printboundary();
+        Console.SetCursorPosition(31, 1);
         GameManager.GameName.Print(ConsoleColor.Yellow);
         
-        _titleMenu.Render(8, 5);
+        _titleMenu.Render(31, 8);
+        PrintHowToPlay();
     }
 
     public override void Exit()

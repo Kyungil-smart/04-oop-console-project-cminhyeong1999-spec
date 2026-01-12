@@ -8,6 +8,7 @@ public class SkillInven
     public SkillInven(PlayerCharacter owner)
     {
         _owner = owner;
+        _skillMenu.Add("스킬", ()=>{});
     }
 
     public void Add(Skill skill)
@@ -27,10 +28,8 @@ public class SkillInven
     }
 
     public void Render()
-    {
-        if (!IsActive) return;
-        
-        _skillMenu.Render(10, 15);
+    {   
+        _skillMenu.Render(30, 16);
     }
 
     public void Select()
