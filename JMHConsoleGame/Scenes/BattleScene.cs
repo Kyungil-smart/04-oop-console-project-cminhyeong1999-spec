@@ -24,8 +24,19 @@ public class BattleScene : Scene
         _battleMenu.Add("공격",Attack);
         _battleMenu.Add("도망치기",BattleQuit);
 
-        _attackMenu.Add("몸통박치기",()=>{});
+        AddAttackMenu();
         _attackMenu.Add("뒤로",ChangeAttackMode);
+        _player.UseSkillMode();
+    }
+
+    private void AddAttackMenu()
+    {
+        if(_player._skillinven == null) return;
+
+        foreach(var index in _player._skillinven._skills)
+        {
+            _attackMenu.Add(index.Name,index.Use);
+        }
     }
 
     public override void Enter()
@@ -75,6 +86,7 @@ public class BattleScene : Scene
     public override void Render()
     {
         Printboundary();
+        PrintHowToPlay();
         _player.DrawHealthGauge();
         _player.DrawManaGauge();
         _player._inventory.Render();
@@ -91,6 +103,7 @@ public class BattleScene : Scene
 
     public override void Exit()
     {
+        _player.UnUseSkillMode();
         _player = null;
         _monster = null;
     }

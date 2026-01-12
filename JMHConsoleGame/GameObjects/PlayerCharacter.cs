@@ -28,11 +28,18 @@ public class PlayerCharacter : GameObject
         _attackValue = 10;
         _inventory = new Inventory(this);
         _skillinven = new SkillInven(this);
-        _skillinven.Add(new Skill{Name="베기"});
+        _skillinven.Add(new Skill{Name="베기",Description="베기동작"});
+        _skillinven.Add(new Skill{Name="찌르기",Description="찌르기동작"});
+        _skillinven.Add(new Skill{Name="휘두르기",Description="휘두르기동작"});
     }
 
     public void Update()
     {
+        if (InputManager.GetKey(ConsoleKey.Escape))
+        {
+            GameManager.IsGameOver = true;
+        }
+
         if (InputManager.GetKey(ConsoleKey.I))
         {
             InventoryControl();
@@ -86,11 +93,27 @@ public class PlayerCharacter : GameObject
         IsActiveControl = !_skillinven.IsActive;
     }
 
+    public void UseSkillMode()
+    {
+        foreach(var index in _skillinven._skills)
+        {
+            if(index.IsBattle == false) index.IsBattle = true;
+        }
+    }
+
+    public void UnUseSkillMode()
+    {
+        foreach(var index in _skillinven._skills)
+        {
+            if(index.IsBattle == true) index.IsBattle = false;
+        }
+    }
+
     private void Move(Vector direction)
     {
         if (Field == null || !IsActiveControl) return;
         
-        Vector current = Position;
+        //Vector current = Position;
         Vector nextPos = Position + direction;
 
         GameObject nextTileObject = Field[nextPos.Y, nextPos.X].OnTileObject;

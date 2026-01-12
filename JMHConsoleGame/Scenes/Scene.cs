@@ -49,5 +49,7 @@ public abstract class Scene
         Console.WriteLine("← : 플레이어 왼쪽으로 움직임");
         Console.SetCursorPosition(73,7);
         Console.WriteLine("→ : 플레이어 오른쪽으로 움직임");
+        Console.SetCursorPosition(73,8);
+        Console.WriteLine("ESC : 게임 종료");
     }
 }

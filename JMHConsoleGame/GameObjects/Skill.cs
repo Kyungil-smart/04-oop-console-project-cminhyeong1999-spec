@@ -6,21 +6,31 @@ public class Skill : Item , IInteractable
     public int Damage { get; set; }
     public Skill() => Init();
     public SkillInven _skillinven;
-
-
-    public override void Use()
-    {
-        _randomDamage.Next(-5,5);
-    }
+    public bool IsBattle;
 
     private void Init()
     {
         Symbol = 'K';
+        IsBattle = false;
         _randomDamage = new Random();
+    }
+
+    public override void Use()
+    {
+        if (!IsBattle)
+        {
+            Console.WriteLine(Description);
+            Console.ReadLine();
+        }
+        else
+        {
+            Console.WriteLine("사용했음");
+            Console.ReadLine();
+        }
     }
 
     public void Interact(PlayerCharacter player)
     {
-        player.AddSkill(this);
+        player.AddSkill(this); 
     }
 }

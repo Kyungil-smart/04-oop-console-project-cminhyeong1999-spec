@@ -14,7 +14,8 @@ public static class InputManager
         ConsoleKey.I,
         ConsoleKey.L,
         ConsoleKey.T,
-        ConsoleKey.K
+        ConsoleKey.K,
+        ConsoleKey.Escape
     };
 
     public static bool GetKey(ConsoleKey input)

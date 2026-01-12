@@ -4,10 +4,7 @@ public class TitleScene : Scene
 {
     private MenuList _titleMenu;
 
-    public TitleScene()
-    {
-        Init();
-    }
+    public TitleScene() => Init();
 
     public void Init()
     {

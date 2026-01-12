@@ -1,6 +1,6 @@
 public class SkillInven
 {
-    private List<Skill> _skills = new List<Skill>();
+    public List<Skill> _skills = new List<Skill>();
     public bool IsActive { get; set; }
     public MenuList _skillMenu = new MenuList();
     private PlayerCharacter _owner;
@@ -48,5 +48,10 @@ public class SkillInven
     {
         if(!IsActive) return;
         _skillMenu.SelectDown();
+    }
+
+    public Skill GetSkillList(int index)
+    {
+        return _skills[index];
     }
 }
