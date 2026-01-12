@@ -2,8 +2,8 @@
 
 public class TownScene : Scene
 {
-    private static readonly int _mapWidth = 80;
-    private static readonly int _mapHeight = 24;
+    private static readonly int _mapWidth = 300;
+    private static readonly int _mapHeight = 300;
     private Tile[,] _field = new Tile[_mapHeight, _mapWidth];
     private PlayerCharacter _player;
     
