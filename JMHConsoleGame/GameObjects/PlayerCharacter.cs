@@ -12,6 +12,7 @@ public class PlayerCharacter : GameObject
     
     public Tile[,] Field { get; set; }
     private Inventory _inventory;
+    private SkillInven _skillinven;
     public bool IsActiveControl { get; private set; }
 
     public PlayerCharacter() => Init();
@@ -26,6 +27,7 @@ public class PlayerCharacter : GameObject
         _manaGauge = "■■■■■";
         _attackValue = 10;
         _inventory = new Inventory(this);
+        _skillinven = new SkillInven(this);
     }
 
     public void Update()
@@ -34,17 +36,24 @@ public class PlayerCharacter : GameObject
         {
             InventoryControl();
         }
+
+        if (InputManager.GetKey(ConsoleKey.K))
+        {
+            SkillInvenControl();
+        }
         
         if (InputManager.GetKey(ConsoleKey.UpArrow))
         {
             Move(Vector.Up);
             _inventory.SelectUp();
+            _skillinven.SelectUp();
         }
 
         if (InputManager.GetKey(ConsoleKey.DownArrow))
         {
             Move(Vector.Down);
             _inventory.SelectDown();
+            _skillinven.SelectDown();
         }
 
         if (InputManager.GetKey(ConsoleKey.LeftArrow))
@@ -60,11 +69,7 @@ public class PlayerCharacter : GameObject
         if (InputManager.GetKey(ConsoleKey.Enter))
         {
             _inventory.Select();
-        }
-
-        if (InputManager.GetKey(ConsoleKey.T))
-        {
-            Health.Value--;
+            _skillinven.Select();
         }
     }
 
@@ -74,6 +79,12 @@ public class PlayerCharacter : GameObject
         IsActiveControl = !_inventory.IsActive;
     }
 
+    public void SkillInvenControl()
+    {
+        _skillinven.IsActive = !_skillinven.IsActive;
+        IsActiveControl = !_skillinven.IsActive;
+    }
+
     private void Move(Vector direction)
     {
         if (Field == null || !IsActiveControl) return;
@@ -81,18 +92,18 @@ public class PlayerCharacter : GameObject
         Vector current = Position;
         Vector nextPos = Position + direction;
 
+        GameObject nextTileObject = Field[nextPos.Y, nextPos.X].OnTileObject;
+
         // 1. 맵 바깥은 아닌지?
         if ( nextPos.Y < Field[0,0].Position.Y || nextPos.X < Field[0,0].Position.X || nextPos.Y >= Field.GetLength(0) || nextPos.X >= Field.GetLength(1))
         {
             return;
         }
         // 2. 벽인지?
-        //if ()
-        //{
-        //    return;
-        //}
-
-        GameObject nextTileObject = Field[nextPos.Y, nextPos.X].OnTileObject;
+        if(nextTileObject?.Symbol == 'W')
+        {
+            return;
+        }
 
         if (nextTileObject != null)
         {
@@ -100,10 +111,7 @@ public class PlayerCharacter : GameObject
             {
                 (nextTileObject as IInteractable).Interact(this);
                 if (Field == null) return;
-
-                
             }
-
         }
 
         if (Field[Position.Y, Position.X].OnTileObject == this)
@@ -118,6 +126,7 @@ public class PlayerCharacter : GameObject
         DrawHealthGauge();
         DrawManaGauge();
         _inventory.Render();
+        _skillinven.Render();
     }
 
     public void AddItem(Item item)
@@ -125,15 +134,20 @@ public class PlayerCharacter : GameObject
         _inventory.Add(item);
     }
 
+    public void AddSkill(Skill skill)
+    {
+        _skillinven.Add(skill);
+    }
+
     public void DrawManaGauge()
     {
-        Console.SetCursorPosition(0, 16);
+        Console.SetCursorPosition(90, 16);
         _healthGauge.Print(ConsoleColor.Blue);
     }
 
     public void DrawHealthGauge()
     {
-        Console.SetCursorPosition(0, 15);
+        Console.SetCursorPosition(90, 15);
         _healthGauge.Print(ConsoleColor.Red);
     }
 
@@ -184,5 +198,10 @@ public class PlayerCharacter : GameObject
     public void Heal(int value)
     {
         Health.Value += value;
+    }
+
+    public void Damage(int value)
+    {
+        Health.Value -= value;
     }
 }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JMHConsoleGame")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+952a8f92110384b9bc37e302c51e0936b4b36a48")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3db74be8a7a381bc99619ed2a5d1957d7ef5de22")]
 [assembly: System.Reflection.AssemblyProductAttribute("JMHConsoleGame")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JMHConsoleGame")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

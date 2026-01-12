@@ -12,8 +12,8 @@ public class GameManager
         
         while (!IsGameOver)
         {
-            // 렌더링
             Console.Clear();
+            // 렌더링
             SceneManager.Render();
             // 키입력 받고
             InputManager.GetUserInput();

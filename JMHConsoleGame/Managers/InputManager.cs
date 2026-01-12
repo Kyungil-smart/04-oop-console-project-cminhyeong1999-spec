@@ -13,7 +13,8 @@ public static class InputManager
         ConsoleKey.Enter,
         ConsoleKey.I,
         ConsoleKey.L,
-        ConsoleKey.T
+        ConsoleKey.T,
+        ConsoleKey.K
     };
 
     public static bool GetKey(ConsoleKey input)

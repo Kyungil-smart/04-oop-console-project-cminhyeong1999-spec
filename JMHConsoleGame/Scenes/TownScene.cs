@@ -2,7 +2,9 @@
 
 public class TownScene : Scene
 {
-    private Tile[,] _field = new Tile[10, 20];
+    private static readonly int _mapWidth = 80;
+    private static readonly int _mapHeight = 24;
+    private Tile[,] _field = new Tile[_mapHeight, _mapWidth];
     private PlayerCharacter _player;
     
     public TownScene(PlayerCharacter player) => Init(player);
@@ -19,20 +21,20 @@ public class TownScene : Scene
                 _field[y, x] = new Tile(pos);
             }
         }
+        _field[8,8].OnTileObject = new Monster();
+        _field[6,6].OnTileObject = new Skill(){Name = "테스트스킬"};
+
+        SetWall();
     }
 
     public override void Enter()
     {
         _player.Field = _field;
-        _player.Position = new Vector(4, 2);
+        if( (_player?.Position.X == null || _player?.Position.Y == null) ||
+            (_player.Position.X == 0    || _player.Position.Y == 0   )    ) 
+            _player.Position = new Vector(4, 2);
+        
         _field[_player.Position.Y, _player.Position.X].OnTileObject = _player;
-
-        _field[8,8].OnTileObject = new Monster();
-
-        _field[3, 5].OnTileObject = new Potion() {Name = "Potion1"};
-        _field[2, 15].OnTileObject = new Potion() {Name = "Potion2"};
-        _field[7, 3].OnTileObject = new Potion() {Name = "Potion3"};
-        _field[9, 19].OnTileObject = new Potion() {Name = "Potion4"};
         
         Debug.Log("타운 씬 진입");
     }
@@ -44,7 +46,8 @@ public class TownScene : Scene
 
     public override void Render()
     {
-        PrintField();
+        //PrintField();
+        PrintCameraView();
         _player.Render();
     }
 
@@ -64,5 +67,57 @@ public class TownScene : Scene
             }
             Console.WriteLine();
         }
+    }
+
+    private void PrintCameraView()
+    {
+        const int view_width = 40;
+        const int view_height = 12;
+        // 플레이어가 있으면 플레이어, 플레이어가 없으면 맵의 (0,0) 기준
+        int centerX = _player?.Position.X ?? 0;
+        int centerY = _player?.Position.Y ?? 0;
+
+        // 화면 출력을 위한 시작점 계산
+        int camLeft = centerX - (view_width / 2);
+        int camTop = centerY - (view_height / 2);
+
+        // 클램프 설정
+        if (camLeft < 0) camLeft = 0;
+        if (camTop < 0) camTop = 0;
+        if (camLeft + view_width > _field.GetLength(1)) camLeft = _field.GetLength(1) - view_width;
+        if (camTop + view_height > _field.GetLength(0)) camTop = _field.GetLength(0) - view_height;
+
+        for (int y = 0; y < view_height; y++)
+        {
+            Console.SetCursorPosition(0, y);
+            int fieldY = camTop + y;
+
+            for (int x = 0; x < view_width; x++)
+            {
+                int fieldX = camLeft + x;
+                _field[fieldY, fieldX].Print();
+            }
+            Console.WriteLine();
+        }
+        
+    }
+
+    private void SetWall()
+    {
+        if(_field == null) return;
+
+        for(int i = 0; i < _field.GetLength(0); i++)
+        {
+            for(int j = 0; j<_field.GetLength(1); j++)
+            {
+                if(i == 0 || i == _field.GetLength(0) - 1) _field[i,j].OnTileObject = new Wall();
+                else if (j == 0 || j == _field.GetLength(1) - 1) _field[i,j].OnTileObject = new Wall();
+            }
+        }
+    }
+
+    private void PrintEmoji()
+    {
+        
     }
 }
