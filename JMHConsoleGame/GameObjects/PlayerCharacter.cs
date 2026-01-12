@@ -4,11 +4,11 @@ using System.Runtime.InteropServices.Marshalling;
 
 public class PlayerCharacter : GameObject
 {
-    public ObservableProperty<int> Health = new ObservableProperty<int>(5);
-    public ObservableProperty<int> Mana = new ObservableProperty<int>(5);
+    public ObservableProperty<int> Health = new ObservableProperty<int>(25);
+    public ObservableProperty<int> Mana = new ObservableProperty<int>(10);
     private string _healthGauge;
     private string _manaGauge;
-    private int _attackValue;
+    public int _attackValue;
     
     public Tile[,] Field { get; set; }
     public Inventory _inventory;
@@ -23,14 +23,12 @@ public class PlayerCharacter : GameObject
         IsActiveControl = true;
         Health.AddListener(SetHealthGauge);
         Mana.AddListener(SetManaGauge);
-        _healthGauge = "■■■■■";
-        _manaGauge = "■■■■■";
-        _attackValue = 10;
+        _healthGauge = SetGauge(Health.Value);
+        _manaGauge = SetGauge(Mana.Value);
+        _attackValue = 0;
         _inventory = new Inventory(this);
         _skillinven = new SkillInven(this);
-        _skillinven.Add(new Skill{Name="베기",Description="베기동작"});
-        _skillinven.Add(new Skill{Name="찌르기",Description="찌르기동작"});
-        _skillinven.Add(new Skill{Name="휘두르기",Description="휘두르기동작"});
+        _skillinven.Add(new Slash());
     }
 
     public void Update()
@@ -113,28 +111,28 @@ public class PlayerCharacter : GameObject
     {
         if (Field == null || !IsActiveControl) return;
         
-        //Vector current = Position;
         Vector nextPos = Position + direction;
-
-        GameObject nextTileObject = Field[nextPos.Y, nextPos.X].OnTileObject;
 
         // 1. 맵 바깥은 아닌지?
         if ( nextPos.Y < Field[0,0].Position.Y || nextPos.X < Field[0,0].Position.X || nextPos.Y >= Field.GetLength(0) || nextPos.X >= Field.GetLength(1))
         {
             return;
         }
+
+        GameObject nextTileObject = Field[nextPos.Y, nextPos.X].OnTileObject;
+
         // 2. 벽인지?
-        if(nextTileObject?.Symbol == 'W')
-        {
-            return;
-        }
+        if(nextTileObject?.Symbol == 'W') return;
 
         if (nextTileObject != null)
         {
             if (nextTileObject is IInteractable)
             {
                 (nextTileObject as IInteractable).Interact(this);
+
                 if (Field == null) return;
+
+                return;
             }
         }
 
@@ -158,29 +156,50 @@ public class PlayerCharacter : GameObject
     public void AddItem(Item item)
     {
         _inventory.Add(item);
-        Debug.Log($"【아이템】 {item.Name} 획득!");
+        Debug.Log($"{item.Name} 획득!");
+    }
+
+    public void RemoveItem(Item item)
+    {
+        _inventory.Remove(item);
+        Debug.LogWarning($"{item.Name} 삭제");
     }
 
     public void AddSkill(Skill skill)
     {
+        if(_skillinven._skills.Count >= 6)
+        {
+            Debug.LogWarning($"{skill.Name} 획득 불가");
+            return;
+        }
         _skillinven.Add(skill);
-        Debug.Log($"【스킬】 {skill.Name} 획득!");
+        Debug.Log($"{skill.Name} 획득!");
+    }
+    public void RemoveSkill(Skill skill)
+    {
+        _skillinven.Remove(skill);
+        Debug.LogWarning($"{skill.Name} 삭제");
     }
 
+    // HP바 출력
     public void DrawHealthGauge()
     {
         Console.SetCursorPosition(30, 14);
         Console.Write("HP ");
         _healthGauge.Print(ConsoleColor.Red);
+        Console.Write($" : {Health.Value}");
     }
 
+    // MP바 출력
     public void DrawManaGauge()
     {
         Console.SetCursorPosition(30, 15);
         Console.Write("MP ");
-        _healthGauge.Print(ConsoleColor.Blue);
+        _manaGauge.Print(ConsoleColor.Blue);
+        Console.Write($" : {Mana.Value}");
     }
 
+    // 가방 활성화 여부 출력
     public void PrintIsInventory()
     {
         Console.SetCursorPosition(55, 14);
@@ -194,6 +213,7 @@ public class PlayerCharacter : GameObject
         }
     }
 
+    // 스킬창 활성화 여부 출력
     public void PrintIsSkillMenu()
     {
         Console.SetCursorPosition(55, 15);
@@ -207,59 +227,44 @@ public class PlayerCharacter : GameObject
         }
     }
 
+    // HP 수치에 따른 HP바 상태 결정 메서드
     public void SetHealthGauge(int health)
     {
-        switch (health)
-        {
-            case 5:
-                _healthGauge = "■■■■■";
-                break;
-            case 4:
-                _healthGauge = "■■■■□";
-                break;
-            case 3:
-                _healthGauge = "■■■□□";
-                break;
-            case 2:
-                _healthGauge = "■■□□□";
-                break;
-            case 1:
-                _healthGauge = "■□□□□";
-                break;
-        }
+        _healthGauge = SetGauge(health);
     }
 
+    // MP 수치에 따른 MP바 상태 결정 메서드
     public void SetManaGauge(int mana)
     {
-        switch (mana)
-        {
-            case 5:
-                _healthGauge = "■■■■■";
-                break;
-            case 4:
-                _healthGauge = "■■■■□";
-                break;
-            case 3:
-                _healthGauge = "■■■□□";
-                break;
-            case 2:
-                _healthGauge = "■■□□□";
-                break;
-            case 1:
-                _healthGauge = "■□□□□";
-                break;
-        }
+        _manaGauge = SetGauge(mana);
     }
 
+    // 절대값 수치를 5로 나눈 후 비율만큼 꽉찬 네모 또는 빈 네모 배열을 반환
+    // ex) 16 / 5 = 3 | 5 - 3 = 2 ==> ■■■ + □□ // 21 / 5 = 4 | 5 - 4 = 1 ==> ■■■■ + □
+    public string SetGauge(int value)
+    {
+        if(value <= 0) return "□□□□□";
+        int _percent = 5;
+        int setString = value / _percent;
+        
+        // 해당 조건을 만족하게 되면 "□□□□□"로 출력되는데
+        // 이러면 hp가 없는 상황과 헷갈릴 것 같아 "■□□□□"로 출력되도록 함
+        if(value >= 0 && setString <= 1) setString = 1;
+
+        return new string('■',setString) + new string('□',_percent - setString); 
+    }
+
+    // 플레이어의 HP가 증가되었을 경우 처리 메서드
     public void Heal(int value)
     {
         Health.Value += value;
-        Debug.Log($"【회복】 HP를 {value}만큼 회복!");
+        Debug.Log($"HP를 {value}만큼 회복!");
     }
 
+    // 플레이어가 데미지를 입었을 경우 처리 메서드
     public void Damage(int value)
     {
         Health.Value -= value;
-        Debug.Log($"【피해】 HP를 {value}만큼 피해를 받음!");
+        Debug.LogWarning($"HP를 {value}만큼 피해를 받음!");
     }
 }

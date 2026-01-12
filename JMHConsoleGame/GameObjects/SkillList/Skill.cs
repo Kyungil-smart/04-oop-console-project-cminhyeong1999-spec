@@ -2,31 +2,33 @@ using System.ComponentModel;
 
 public class Skill : Item , IInteractable
 {
-    private Random _randomDamage;
     public int Damage { get; set; }
     public Skill() => Init();
     public SkillInven _skillinven;
     public bool IsBattle;
 
-    private void Init()
+    public void Init()
     {
-        Symbol = 'K';
+        Symbol = 'S';
         IsBattle = false;
-        _randomDamage = new Random();
     }
 
     public override void Use()
     {
+        // 코드 재사용 하려다 꼬여서 비전투 시 단순 설명 출력 용으로 사용중
         if (!IsBattle)
         {
-            Console.WriteLine(Description);
-            Console.ReadLine();
+            Debug.Log("스킬설명");
         }
         else
         {
-            Console.WriteLine("사용했음");
-            Console.ReadLine();
+            Debug.Log("스킬사용");
         }
+    }
+
+    public virtual void Attack(Monster monster,int Damage)
+    {
+        monster.TakeDamage(Damage);
     }
 
     public void Interact(PlayerCharacter player)

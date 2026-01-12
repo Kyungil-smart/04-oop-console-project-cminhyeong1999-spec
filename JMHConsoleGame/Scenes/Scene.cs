@@ -31,6 +31,7 @@ public abstract class Scene
         }
     }
 
+    // 수집한 로그를 출력하기 위한 로그창의 테두리를 출력
     public void PrintLog()
     {
         Ractangle _Logboundary = new Ractangle(72,14,40,16);
@@ -38,6 +39,7 @@ public abstract class Scene
         Debug.Render();
     }
 
+    // 조작방법 출력
     public void PrintHowToPlay()
     {
         Ractangle _menualboundary = new Ractangle(72,0,40,14);

@@ -8,6 +8,7 @@ public class GameManager
 
     public void Run()
     {
+        // 커서 깜빡임을 off로 하여 화면 깜빡임을 약간이나마 줄이는 용도
         Console.CursorVisible = false;
         Init();
         
@@ -38,7 +39,6 @@ public class GameManager
         SceneManager.AddScene("Title", new TitleScene());
         //SceneManager.AddScene("Story", new StoryScene());
         SceneManager.AddScene("Town", new TownScene(_player));
-        //SceneManager.AddScene("Log", new LogScene());
         SceneManager.AddScene("Credit", new CreditScene());
         
         SceneManager.Change("Title");

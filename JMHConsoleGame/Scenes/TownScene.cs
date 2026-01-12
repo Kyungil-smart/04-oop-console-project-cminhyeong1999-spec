@@ -21,8 +21,10 @@ public class TownScene : Scene
                 _field[y, x] = new Tile(pos);
             }
         }
-        _field[8,8].OnTileObject = new Monster();
-        _field[6,6].OnTileObject = new Skill(){Name = "테스트스킬"};
+        
+        var ripper = CreateMonster.Create(Monster.MonsterType.Ripper);
+        ripper.Position = new Vector(8, 8);
+        _field[8,8].OnTileObject = ripper;
 
         SetWall();
     }

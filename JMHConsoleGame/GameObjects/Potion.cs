@@ -8,11 +8,12 @@ public class Potion : Item, IInteractable
     private void Init()
     {
         Symbol = 'I';
+        Name = "Potion";
     }
 
     public override void Use()
     {
-        Owner.Heal(1);
+        Owner.Heal(5);
         
         Inventory.Remove(this);
         Inventory = null;
