@@ -27,6 +27,7 @@ public class BattleScene : Scene
         AddAttackMenu();
         _attackMenu.Add("뒤로",ChangeAttackMode);
         _player.UseSkillMode();
+        Debug.Log($"【전투】{_monster.MonsterName} 전투 시작!");
     }
 
     private void AddAttackMenu()
@@ -98,11 +99,12 @@ public class BattleScene : Scene
         {
             _battleMenu.Render(30,16);
         }
-
+        PrintLog();
     }
 
     public override void Exit()
     {
+        Debug.Log($"【전투】{_monster.MonsterName} 전투 종료");
         _player.UnUseSkillMode();
         _player = null;
         _monster = null;

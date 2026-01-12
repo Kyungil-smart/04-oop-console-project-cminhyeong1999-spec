@@ -11,9 +11,4 @@ public abstract class Item : GameObject
     public PlayerCharacter Owner { get; set; }
 
     public abstract void Use();
-
-    public string PrintInfo()
-    {
-        return Description;
-    }
 }

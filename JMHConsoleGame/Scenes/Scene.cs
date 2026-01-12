@@ -31,12 +31,19 @@ public abstract class Scene
         }
     }
 
+    public void PrintLog()
+    {
+        Ractangle _Logboundary = new Ractangle(72,14,40,16);
+        _Logboundary.Draw();
+        Debug.Render();
+    }
+
     public void PrintHowToPlay()
     {
         Ractangle _menualboundary = new Ractangle(72,0,40,14);
         _menualboundary.Draw();
         Console.SetCursorPosition(73,1);
-        Console.WriteLine("조작 방법");
+        Console.WriteLine("【조작방법】");
         Console.SetCursorPosition(73,2);
         Console.WriteLine("I : 가방 활성화 On/Off");
         Console.SetCursorPosition(73,3);

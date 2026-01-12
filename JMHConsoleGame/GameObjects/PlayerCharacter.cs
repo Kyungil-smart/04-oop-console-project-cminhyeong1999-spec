@@ -158,11 +158,13 @@ public class PlayerCharacter : GameObject
     public void AddItem(Item item)
     {
         _inventory.Add(item);
+        Debug.Log($"【아이템】 {item.Name} 획득!");
     }
 
     public void AddSkill(Skill skill)
     {
         _skillinven.Add(skill);
+        Debug.Log($"【스킬】 {skill.Name} 획득!");
     }
 
     public void DrawHealthGauge()
@@ -252,10 +254,12 @@ public class PlayerCharacter : GameObject
     public void Heal(int value)
     {
         Health.Value += value;
+        Debug.Log($"【회복】 HP를 {value}만큼 회복!");
     }
 
     public void Damage(int value)
     {
         Health.Value -= value;
+        Debug.Log($"【피해】 HP를 {value}만큼 피해를 받음!");
     }
 }
