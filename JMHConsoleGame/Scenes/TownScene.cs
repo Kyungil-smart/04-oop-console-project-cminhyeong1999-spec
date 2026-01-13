@@ -22,9 +22,19 @@ public class TownScene : Scene
             }
         }
 
-        SetWall();
-        SetField();
-        MirrorCenterPoint();
+        SetWall();  // 벽 생성
+        SetField(); // 2사분면 필드 제작
+        MirrorCenterPoint(); // 50,50 기준 점대칭
+
+        _field[2,2].OnTileObject = new Ghost();
+        _field[50,2].OnTileObject = new Potion();
+        _field[99,2].OnTileObject = new GhostKnight();
+        _field[2,99].OnTileObject = new Zombie();
+        _field[50,99].OnTileObject = new Heal();
+        _field[99,99].OnTileObject = new Fireball();
+        _field[2,50].OnTileObject = new Ripper();
+        _field[50,50].OnTileObject = new Lich();
+        _field[99,50].OnTileObject = new Potion();
     }
 
     public override void Enter()
@@ -123,7 +133,6 @@ public class TownScene : Scene
         }        
     }
 
-
     // 중앙(타일 사이) 기준 대칭: width == 300 같은 짝수 너비에서 가운데(149.5)를 축으로 사용
     private void MirrorCenterPoint()
     {
@@ -140,25 +149,6 @@ public class TownScene : Scene
                 _field[100 - i,j].OnTileObject = index;
                 _field[100 - i,100 - j].OnTileObject = index;
             }
-        }
-    }
-
-    // 얕은 복제: 현재 프로젝트의 GameObject들은 상태가 단순하므로 새 인스턴스를 만들어 할당
-    // 필요 시 복제 로직을 확장하세요 (예: 아이템 스택, 고유 ID 등)
-    private GameObject CloneGameObject(GameObject original)
-    {
-        if (original == null) return null;
-
-        switch (original)
-        {
-            case Wall:
-                return new Wall();
-            case PlayerCharacter:
-                // 플레이어는 복제하지 않음(맵 대칭시에 플레이어를 복제하면 안됨)
-                return null;
-            default:
-                // 다른 GameObject 계열이 있다면 타입별로 추가 처리
-                return null;
         }
     }
 

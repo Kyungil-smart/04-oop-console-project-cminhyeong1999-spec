@@ -1,15 +1,15 @@
-public class Slash : Skill
+public class TestSkill : Skill
 {
-    public Slash() => Init();
+    public TestSkill() => Init();
 
     private new void Init()
     {
         base.Init();
-        Name = "베기";
-        Damage = 20;
+        Name = "테스트용한방죽창";
+        Damage = 9999;
         AddHealth = 0;
         ManaCost = 0;
-        Description = $"【정보】스킬:베기/데미지:{Damage}";
+        Description = $"{Damage}데미지로한방컷";
     }
 
     public override void Use()

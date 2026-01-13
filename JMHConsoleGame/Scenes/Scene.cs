@@ -60,5 +60,7 @@ public abstract class Scene
         Console.WriteLine("→ : 플레이어 오른쪽으로 움직임");
         Console.SetCursorPosition(73,8);
         Console.WriteLine("ESC : 게임 종료");
+        Console.SetCursorPosition(73,9);
+        Console.WriteLine("리치(L)을 죽이면 게임 클리어!");
     }
 }

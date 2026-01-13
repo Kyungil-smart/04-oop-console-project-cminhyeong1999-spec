@@ -5,7 +5,7 @@ using System.Runtime.InteropServices.Marshalling;
 public class PlayerCharacter : GameObject
 {
     public ObservableProperty<int> Health = new ObservableProperty<int>(25);
-    public ObservableProperty<int> Mana = new ObservableProperty<int>(10);
+    public ObservableProperty<int> Mana = new ObservableProperty<int>(25);
     private string _healthGauge;
     private string _manaGauge;
     public int _attackValue;
@@ -29,6 +29,7 @@ public class PlayerCharacter : GameObject
         _inventory = new Inventory(this);
         _skillinven = new SkillInven(this);
         _skillinven.Add(new Slash());
+        _skillinven.Add(new TestSkill());
     }
 
     public void Update()
@@ -131,8 +132,7 @@ public class PlayerCharacter : GameObject
                 (nextTileObject as IInteractable).Interact(this);
 
                 if (Field == null) return;
-
-                return;
+                else if (nextTileObject is Monster) return;
             }
         }
 
@@ -239,11 +239,12 @@ public class PlayerCharacter : GameObject
         _manaGauge = SetGauge(mana);
     }
 
-    // 절대값 수치를 5로 나눈 후 비율만큼 꽉찬 네모 또는 빈 네모 배열을 반환
+    // 25 이하의 절대값 수치를 5로 나눈 후 비율만큼 꽉찬 네모 또는 빈 네모 배열을 반환
     // ex) 16 / 5 = 3 | 5 - 3 = 2 ==> ■■■ + □□ // 21 / 5 = 4 | 5 - 4 = 1 ==> ■■■■ + □
     public string SetGauge(int value)
     {
         if(value <= 0) return "□□□□□";
+        else if (value >= 25) return "■■■■■";
         int _percent = 5;
         int setString = value / _percent;
         

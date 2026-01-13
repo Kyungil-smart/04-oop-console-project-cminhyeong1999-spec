@@ -54,16 +54,29 @@ public class BattleScene : Scene
             return;
         }
 
+        if (_player.Mana.Value < _skill.ManaCost)
+        {
+            Debug.LogWarning("마나가 부족하여 사용할 수 없음!");
+            return;
+        }
+
         // 실제 데미지 적용
         Debug.Log($"Player의 {_skill.Name} 사용!");
-        _skill.Attack(_monster, _skill.Damage);
+        _skill.Execute(_player, _monster);
 
         // 몬스터 사망 처리
         if (_monster.IsDead)
         {
             Debug.Log($"【전투】{_monster.MonsterName} 처치!");
             RemoveMonsterFromField(_monster, _player);
-            SceneManager.Change("Town");
+            if(_monster is Lich)
+            {
+                SceneManager.Change(new ClearScene());
+            }
+            else
+            {
+                SceneManager.Change("Town");
+            }
             return;
         }
 
